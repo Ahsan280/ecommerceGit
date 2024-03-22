@@ -297,58 +297,7 @@ def login(request):
             messages.error(request, 'Invalid Credentials')
             return redirect('login')
 -----------------------------------
-models.py
-from django.db import models
-from store.models import Product, Variation
-from accounts.models import Account
 
-# Create your models here.
-class Cart(models.Model):
-    cart=models.CharField(max_length=200, blank=True)
-    created_at=models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return self.cart
-
-class CartItem(models.Model):
-    cart=models.ForeignKey(Cart, on_delete=models.CASCADE, null=True)
-    user=models.ForeignKey(Account, on_delete=models.CASCADE, null=True)
-    product=models.ForeignKey(Product, on_delete=models.CASCADE)
-    quantity=models.IntegerField()
-    variation=models.ManyToManyField(Variation, blank=True)
-
-    def get_CartItem_price(self):
-        return self.quantity*self.product.product_price
-
-    def __unicode__(self):
-        return self.product
------------------------------
-from django.db import models
-from category.models import Category
-
-# Create your models here.
-class Product(models.Model):
-    product_name=models.CharField(max_length=150, unique=True)
-    category=models.ForeignKey(Category, on_delete=models.CASCADE)
-    slug=models.SlugField(max_length=150, unique=True)
-    description=models.TextField(max_length=300, blank=True)
-    product_price=models.FloatField()
-    stock=models.IntegerField(default=100)
-    image=models.ImageField(upload_to='photos/products')
-    is_available=models.BooleanField(default=True)
-    created_at=models.DateTimeField(auto_now_add=True)
-    updated_at=models.DateTimeField(auto_now=True)
-
-    def __str__(self):
-        return self.product_name
-
-class Variation(models.Model):
-    product=models.ForeignKey(Product, on_delete=models.CASCADE)
-    variation_category=models.CharField(max_length=200)
-    variation_value=models.CharField(max_length=200)
-
-    def __str__(self):
-        return self.variation_value
 gpt-image
 GPT-3.5
 (Internet connection lost. Please try again)
